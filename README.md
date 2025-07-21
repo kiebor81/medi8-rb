@@ -112,7 +112,7 @@ end
 
 ## Usage
 
-Medi8 uses a simple request/handler model. You define a request class, register a handler using handles, and then invoke `Medi8.send(request)`.
+Medi8 uses a simple request/handler model. You define a request class, register a handler using `handles`, and then invoke `Medi8.send(request)`.
 
 ### Create a Request
 
@@ -322,9 +322,3 @@ MIT License © kiebor81
 ## Contributing
 
 Bug reports and pull requests welcome.
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-feature`)
-3. Commit your changes (`git commit -am 'Add feature'`)
-4. Push to the branch (`git push origin my-feature`)
-5. Create a new Pull Request
