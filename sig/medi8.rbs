@@ -1,0 +1,51 @@
+# medi8.rbs
+module Medi8
+  def self.configure: () { (Configuration) -> void } -> void
+  def self.registry: () -> Registry
+  def self.send: (untyped request) -> untyped
+  def self.publish: (untyped event) -> void
+  def self.middleware_stack: () -> MiddlewareStack
+  def self.use: (untyped middleware) -> void
+
+  class Configuration
+    def registry: () -> Registry
+    def middleware_stack: () -> MiddlewareStack
+    def use: (untyped middleware) -> void
+  end
+
+  class Registry
+    def register: (untyped request_class, untyped handler_class) -> void
+    def find_handler_for: (untyped request_class) -> untyped
+    def register_notification: (untyped event_class, untyped handler_class, ?async: bool) -> void
+    def find_notification_handlers_for: (untyped event_class) -> Array[[untyped, bool]]
+  end
+
+  class MiddlewareStack
+    def use: (untyped middleware) -> void
+    def call: (untyped request, &block) -> untyped
+  end
+
+  class Mediator
+    def initialize: (Registry registry) -> void
+    def send: (untyped request) -> untyped
+    def publish: (untyped event) -> void
+  end
+
+  module Handler
+    module ClassMethods
+      def handles: (untyped request_class) -> void
+    end
+  end
+
+  module NotificationHandler
+    module ClassMethods
+      def subscribes_to: (untyped event_class, ?async: bool) -> void
+    end
+  end
+
+  module Jobs
+    class NotificationJob < ::ActiveJob::Base
+      def perform: (String handler_class_name, Hash[String, untyped] event_hash, String event_class_name) -> void
+    end
+  end
+end
